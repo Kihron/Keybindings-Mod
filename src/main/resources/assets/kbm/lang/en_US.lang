@@ -1,0 +1,93 @@
+#Keybinds
+keys.keymod.all=All Games
+keys.keymod.guild=Guild
+keys.keymod.game=Current Game
+keys.keymod.gp=Guild Party
+keys.keymod.pd=Party Disband
+keys.keymod.hb=Hub
+keys.keymod.pw=Party Warp
+
+keys.keymod.a1.default=Action 1
+keys.keymod.a2.default=Action 2
+keys.keymod.a3.default=Action 3
+keys.keymod.a4.default=Action 4
+keys.keymod.a5.default=Action 5
+keys.keymod.a6.default=Action 6
+keys.keymod.a7.default=Action 7
+keys.keymod.a8.default=Action 8
+keys.keymod.a9.default=Action 9
+
+keys.keymod.a1.skywars=Skywars Solo Insane
+keys.keymod.a2.skywars=Skywars Team Insane
+keys.keymod.a3.skywars=Skywars Ranked
+keys.keymod.a4.skywars=Action 4
+keys.keymod.a5.skywars=Action 5
+keys.keymod.a6.skywars=Action 6
+keys.keymod.a7.skywars=Action 7
+keys.keymod.a8.skywars=Action 8
+keys.keymod.a9.skywars=Action 9
+
+keys.keymod.a1.bedwars=Bedwars Doubles
+keys.keymod.a2.bedwars=Bedwars Threes
+keys.keymod.a3.bedwars=Bedwars Fours
+keys.keymod.a4.bedwars=Action 4
+keys.keymod.a5.bedwars=Action 5
+keys.keymod.a6.bedwars=Action 6
+keys.keymod.a7.bedwars=Action 7
+keys.keymod.a8.bedwars=Action 8
+keys.keymod.a9.bedwars=Action 9
+
+keys.keymod.a1.zombies=Zombies Story Normal
+keys.keymod.a2.zombies=Zombies Story Hard
+keys.keymod.a3.zombies=Action 3
+keys.keymod.a4.zombies=Action 4
+keys.keymod.a5.zombies=Action 5
+keys.keymod.a6.zombies=Action 6
+keys.keymod.a7.zombies=Action 7
+keys.keymod.a8.zombies=Action 8
+keys.keymod.a9.zombies=Action 9
+
+keys.keymod.a1.bridges=Bridges Singles
+keys.keymod.a2.bridges=Bridges Doubles
+keys.keymod.a3.bridges=Bridges Quads
+keys.keymod.a4.bridges=Bridges 2v2v2v2
+keys.keymod.a5.bridges=Bridges 3v3v3v3
+keys.keymod.a6.bridges=Action 6
+keys.keymod.a7.bridges=Action 7
+keys.keymod.a8.bridges=Action 8
+keys.keymod.a9.bridges=Action 9
+
+keys.keymod.a1.duels=Duels Singles
+keys.keymod.a2.duels=Duels Doubles
+keys.keymod.a3.duels=Action 3
+keys.keymod.a4.duels=Action 4
+keys.keymod.a5.duels=Action 5
+keys.keymod.a6.duels=Action 6
+keys.keymod.a7.duels=Action 7
+keys.keymod.a8.duels=Action 8
+keys.keymod.a9.duels=Action 9
+
+keys.keymod.a1.tnt=TNT Run
+keys.keymod.a2.tnt=PvP Run
+keys.keymod.a3.tnt=Bowspleef
+keys.keymod.a4.tnt=TNT Tag
+keys.keymod.a5.tnt=TNT Wizards
+keys.keymod.a6.tnt=Action 6
+keys.keymod.a7.tnt=Action 7
+keys.keymod.a8.tnt=Action 8
+keys.keymod.a9.tnt=Action 9
+
+keys.keymod.ra=Cycle Right
+keys.keymod.la=Cycle Left
+keys.keymod.sc=Select Current
+keys.keymod.rp=Play Again
+keys.keymod.lg=List Games
+
+update.ready=There is an update for %s available!
+update.version=Current Version: %s, Newest Version: %s
+update.download=Click To Download
+update.changelog=Changelog
+
+gui.config.main_title=KeyBindings
+gui.config.category.update_checker=Update Checker
+gui.config.category.update_checker.tooltip=Enable/Disable Update Checker

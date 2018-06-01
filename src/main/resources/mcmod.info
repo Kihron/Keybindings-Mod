@@ -1,0 +1,16 @@
+[
+{
+  "modid": "kbm",
+  "name": "KeyBindings Mod",
+  "description": "Adds many features to make your life easier on the Hypixel Network.",
+  "version": "Update 5",
+  "mcversion": "1.8.9",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Kihron"],
+  "credits": "Kihron",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [mod_MinecraftForge]
+}
+]
