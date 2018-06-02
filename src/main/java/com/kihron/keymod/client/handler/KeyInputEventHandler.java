@@ -76,7 +76,7 @@ public class KeyInputEventHandler {
 
     //Makes the player say something
     private static void sendMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("" + message);
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + message);
     }
 
     //Sends message to player
@@ -107,6 +107,7 @@ public class KeyInputEventHandler {
     private void playGame(int id) {
         playGame(id, false);
     }
+
     private void playGame(int id, boolean override){
         if (lockOn && !override) {
             addMessage("Lock is " + EnumChatFormatting.GREEN + "On");
