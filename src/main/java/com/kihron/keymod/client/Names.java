@@ -23,6 +23,7 @@ public final class Names
         public static final String A7 = "keys.keymod.a7";
         public static final String A8 = "keys.keymod.a8";
         public static final String A9 = "keys.keymod.a9";
+        public static final String LOCK = "keys.keymod.lock";
 
         //Arrow Keys
         public static final String RA = "keys.keymod.ra";

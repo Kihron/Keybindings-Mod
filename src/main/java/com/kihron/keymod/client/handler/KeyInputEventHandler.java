@@ -70,11 +70,13 @@ public class KeyInputEventHandler {
         tnt.put(5, "tnt_capture");
     }
 
+    private boolean lockOn = false;
+
     private Map<String, Map<Integer, String>> gameStrings;
 
     //Makes the player say something
     private static void sendMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + message);
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("" + message);
     }
 
     //Sends message to player
@@ -102,11 +104,18 @@ public class KeyInputEventHandler {
         addMessage("Currently Selected: " + EnumChatFormatting.GREEN + getCurrentGame());
     }
 
-    private void playGame(int i) {
-        if (gameStrings.get(getCurrentGame()).keySet().size() >= i) {
-            sendMessage("play " + gameStrings.get(getCurrentGame()).get(i));
+    private void playGame(int id) {
+        playGame(id, false);
+    }
+    private void playGame(int id, boolean override){
+        if (lockOn && !override) {
+            addMessage("Lock is " + EnumChatFormatting.GREEN + "On");
+            return;
+        }
+        if (gameStrings.get(getCurrentGame()).keySet().size() >= id) {
+            sendMessage("play " + gameStrings.get(getCurrentGame()).get(id));
             lastSelected = selected;
-            lastGame = i;
+            lastGame = id;
         }
     }
 
@@ -158,6 +167,11 @@ public class KeyInputEventHandler {
             selectGame((selected + options.length - 1) % options.length);
         }
 
+        if (Keybindings.lock.isPressed()) {
+            lockOn = !lockOn;
+            addMessage("Lock " + (lockOn ? EnumChatFormatting.GREEN + "Enabled": EnumChatFormatting.RED + "Disabled"));
+        }
+
         if (Keybindings.sc.isPressed()) {
             if (sb != null) {
                 switch (sb.toLowerCase()) {
@@ -176,7 +190,7 @@ public class KeyInputEventHandler {
                     case "duels":
                         selectGame(4);
                         break;
-                    case  "thetntgames":
+                    case "thetntgames":
                         selectGame(5);
                         break;
                     default:
@@ -228,7 +242,7 @@ public class KeyInputEventHandler {
             if (lastGame != 0) {
                 if (selected != lastSelected)
                     selectGame(lastSelected);
-                playGame(lastGame);
+                playGame(lastGame, true);
             }
             else {
                 addMessage(EnumChatFormatting.RED + "No previous game found.");

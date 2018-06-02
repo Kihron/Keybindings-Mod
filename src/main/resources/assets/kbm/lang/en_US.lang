@@ -77,6 +77,8 @@ keys.keymod.a7.tnt=Action 7
 keys.keymod.a8.tnt=Action 8
 keys.keymod.a9.tnt=Action 9
 
+keys.keymod.lock=Lock
+
 keys.keymod.ra=Cycle Right
 keys.keymod.la=Cycle Left
 keys.keymod.sc=Select Current
