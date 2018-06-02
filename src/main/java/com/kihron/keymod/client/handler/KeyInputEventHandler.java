@@ -146,7 +146,10 @@ public class KeyInputEventHandler {
     }
 
     private void selectGame(int game) {
+        selectGame(game, true);
+    }
 
+    private void selectGame(int game, boolean print) {
         selected = game;
         if (print)
         printGame();
