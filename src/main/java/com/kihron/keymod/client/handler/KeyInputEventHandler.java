@@ -2,6 +2,8 @@ package com.kihron.keymod.client.handler;
 
 import com.kihron.keymod.client.GetScoreboard;
 import com.kihron.keymod.client.Names;
+import com.kihron.keymod.client.json.Game;
+import com.kihron.keymod.client.json.JSONReader;
 import com.kihron.keymod.client.settings.Keybindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
@@ -11,6 +13,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,42 +40,60 @@ public class KeyInputEventHandler {
             gameStrings.put(key, new HashMap<>());
         }
 
-        Map<Integer, String> skywars = gameStrings.get("Skywars");
-        skywars.put(1, "solo_insane");
-        skywars.put(2, "teams_insane");
-        skywars.put(3, "ranked_normal");
+        Map<Integer, Game> skywars = gameStrings.get("Skywars");
+        skywars.put(1, new Game("solo_insane", "Skywars Solo Insane"));
+        skywars.put(2, new Game("teams_insane", "Skywars Teams Insane"));
+        skywars.put(3, new Game("ranked_normal", "Skywars Ranked"));
 
-        Map<Integer, String> bedwars = gameStrings.get("Bedwars");
-        bedwars.put(1, "bedwars_eight_two");
-        bedwars.put(2, "bedwars_four_three");
-        bedwars.put(3, "bedwars_four_four");
+        Map<Integer, Game> bedwars = gameStrings.get("Bedwars");
+        bedwars.put(1, new Game("bedwars_eight_two", "Bedwars Doubles"));
+        bedwars.put(2, new Game("bedwars_four_three", "Bedwars Threes"));
+        bedwars.put(3, new Game("bedwars_four_four", "Bedwars Fours"));
 
-        Map<Integer, String> zombies = gameStrings.get("Zombies");
-        zombies.put(1, "prototype_zombies_story_normal");
-        zombies.put(2, "prototype_zombies_story_hard");
+        Map<Integer, Game> zombies = gameStrings.get("Zombies");
+        zombies.put(1, new Game("prototype_zombies_story_normal", "Zombies Normal"));
+        zombies.put(2, new Game("prototype_zombies_story_hard", "Zombies Hard"));
 
-        Map<Integer, String> bridges = gameStrings.get("Bridges");
-        bridges.put(1, "prototype_bridge_1v1");
-        bridges.put(2, "prototype_bridge_2v2");
-        bridges.put(3, "prototype_bridge_4v4");
-        bridges.put(4, "prototype_bridge_2v2v2v2");
-        bridges.put(5, "prototype_bridge_3v3v3v3");
+        Map<Integer, Game> bridges = gameStrings.get("Bridges");
+        bridges.put(1, new Game("prototype_bridge_1v1", "Bridges 1v1"));
+        bridges.put(2, new Game("prototype_bridge_2v2", "Bridges 2v2"));
+        bridges.put(3, new Game("prototype_bridge_4v4", "Bridges 4v4"));
+        bridges.put(4, new Game("prototype_bridge_2v2v2v2", "Bridges 2v2v2v2"));
+        bridges.put(5, new Game("prototype_bridge_3v3v3v3", "Bridges 3v3v3v3"));
 
-        Map<Integer, String> duels = gameStrings.get("Duels");
-        duels.put(1, "duels_uhc_duel");
-        duels.put(2, "duels_uhc_doubles");
+        Map<Integer, Game> duels = gameStrings.get("Duels");
+        duels.put(1, new Game("duels_uhc_duel", "Duels 1v1"));
+        duels.put(2, new Game("duels_uhc_doubles", "Duels 2v2"));
 
-        Map<Integer, String> tnt = gameStrings.get("TNT");
-        tnt.put(1, "tnt_tntrun");
-        tnt.put(2, "tnt_pvprun");
-        tnt.put(3, "tnt_bowspleef");
-        tnt.put(4, "tnt_tntag");
-        tnt.put(5, "tnt_capture");
+        Map<Integer, Game> tnt = gameStrings.get("TNT");
+        tnt.put(1, new Game("tnt_tntrun", "TNT Run"));
+        tnt.put(2, new Game("tnt_pvprun", "PvP Run"));
+        tnt.put(3, new Game("tnt_bowspleef", "Bow Spleef"));
+        tnt.put(4, new Game("tnt_tntag", "TNT Tag"));
+        tnt.put(5, new Game("tnt_capture", "TNT Wizards"));
+
+        Map<String, Map<Integer, Game>> tempK = null;
+        try {
+            tempK = JSONReader.readMap("https://raw.githubusercontent.com/Kihron/Electritech/master/keys.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (tempK != null)
+            gameStrings = tempK;
+
+        String[] tempC = null;
+        try {
+            tempC = JSONReader.readCategories("https://raw.githubusercontent.com/Kihron/Electritech/master/keys.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (tempC != null)
+            options = tempC;
     }
 
     private boolean lockOn = false;
 
-    private Map<String, Map<Integer, String>> gameStrings;
+    private Map<String, Map<Integer, Game>> gameStrings;
 
     //Makes the player say something
     private static void sendMessage(String message) {
@@ -96,9 +117,6 @@ public class KeyInputEventHandler {
         addMessage(m);
     }
 
-    private IChatComponent getGameComponent(int i, String s) {
-        return new ChatComponentTranslation("keys.keymod.a" + (i + 1) + "." + s);
-    }
 
     private void printGame() {
         addMessage("Currently Selected: " + EnumChatFormatting.GREEN + getCurrentGame());
@@ -119,22 +137,32 @@ public class KeyInputEventHandler {
         }
     }
 
+    private Game getLastGame(int i) {
+        return gameStrings.get(getCurrentGame()).get(i);
+    }
+
     private String getCurrentGame() {
         return options[selected];
     }
 
     private void selectGame(int game) {
+
         selected = game;
+        if (print)
         printGame();
-        Keybindings.a1.setKeyDescription(Names.Keys.A1 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a2.setKeyDescription(Names.Keys.A2 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a3.setKeyDescription(Names.Keys.A3 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a4.setKeyDescription(Names.Keys.A4 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a5.setKeyDescription(Names.Keys.A5 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a6.setKeyDescription(Names.Keys.A6 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a7.setKeyDescription(Names.Keys.A7 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a8.setKeyDescription(Names.Keys.A8 + "." + getCurrentGame().toLowerCase());
-        Keybindings.a9.setKeyDescription(Names.Keys.A9 + "." + getCurrentGame().toLowerCase());
+        Keybindings.a1.setKeyDescription(getLastGameTranslateString(1));
+        Keybindings.a2.setKeyDescription(getLastGameTranslateString(2));
+        Keybindings.a3.setKeyDescription(getLastGameTranslateString(3));
+        Keybindings.a4.setKeyDescription(getLastGameTranslateString(4));
+        Keybindings.a5.setKeyDescription(getLastGameTranslateString(5));
+        Keybindings.a6.setKeyDescription(getLastGameTranslateString(6));
+        Keybindings.a7.setKeyDescription(getLastGameTranslateString(7));
+        Keybindings.a8.setKeyDescription(getLastGameTranslateString(8));
+        Keybindings.a9.setKeyDescription(getLastGameTranslateString(9));
+    }
+
+    private String getLastGameTranslateString(int id) {
+        return getLastGame(id) == null ? "Action " + id : getLastGame(id).getTranslateString();
     }
 
     @SubscribeEvent
@@ -252,9 +280,15 @@ public class KeyInputEventHandler {
         if (Keybindings.lg.isPressed()) {
             printGame();
             for (int i = 0; i < gameStrings.get(getCurrentGame()).size(); i++) {
-                addMessage(new ChatComponentText((i + 1) + " - "), getGameComponent(i, getCurrentGame().toLowerCase()));
+                addMessage((i + 1) + " - " + getLastGameTranslateString(i + 1));
             }
-            addMessage( new ChatComponentText("Last Played: "), getGameComponent(lastGame, options[lastSelected].toLowerCase()));
+            if (selected != lastSelected && lastGame != 0) {
+                int temp = selected;
+                selectGame(lastSelected, false);
+                addMessage("Last Played: " + getLastGameTranslateString(lastGame));
+                selectGame(temp, false);
+            } else
+                addMessage("Last Played: " + getLastGameTranslateString(lastGame));
         }
     }
 }
