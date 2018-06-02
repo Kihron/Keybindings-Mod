@@ -47,7 +47,7 @@ public class VersionChecker {
         String version = "";
         String name = "";
         List<String> changeLog = new ArrayList<String>();
-        String downloadURL = "https://minecraft.curseforge.com/projects/keybindings-mod/files";
+        String downloadURL = "";
         boolean updateRequired = false;
         try {
             URL URL = new URL(url);
