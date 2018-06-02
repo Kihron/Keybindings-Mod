@@ -1,13 +1,11 @@
 package com.kihron.keymod.client.handler;
 
 import com.kihron.keymod.client.GetScoreboard;
-import com.kihron.keymod.client.Names;
 import com.kihron.keymod.client.json.Game;
 import com.kihron.keymod.client.json.JSONReader;
 import com.kihron.keymod.client.settings.Keybindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -132,7 +130,7 @@ public class KeyInputEventHandler {
             return;
         }
         if (gameStrings.get(getCurrentGame()).keySet().size() >= id) {
-            sendMessage("play " + gameStrings.get(getCurrentGame()).get(id));
+            sendMessage("play " + gameStrings.get(getCurrentGame()).get(id).getGameString());
             lastSelected = selected;
             lastGame = id;
         }
@@ -291,7 +289,7 @@ public class KeyInputEventHandler {
                 selectGame(lastSelected, false);
                 addMessage("Last Played: " + getLastGameTranslateString(lastGame));
                 selectGame(temp, false);
-            } else
+            } else if (lastGame != 0)
                 addMessage("Last Played: " + getLastGameTranslateString(lastGame));
         }
     }
