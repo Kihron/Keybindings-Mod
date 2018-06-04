@@ -81,7 +81,7 @@ keys.keymod.lock=Lock
 
 keys.keymod.ra=Cycle Right
 keys.keymod.la=Cycle Left
-keys.keymod.sc=Select Current
+keys.keymod.sc=List Categories
 keys.keymod.rp=Play Again
 keys.keymod.lg=List Games
 

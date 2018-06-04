@@ -1,13 +1,10 @@
 package com.kihron.keymod.client.handler;
 
-import com.kihron.keymod.client.GetScoreboard;
-import com.kihron.keymod.client.Names;
 import com.kihron.keymod.client.json.Game;
 import com.kihron.keymod.client.json.JSONReader;
 import com.kihron.keymod.client.settings.Keybindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,20 +16,97 @@ import java.util.Map;
 
 public class KeyInputEventHandler {
 
+
+    /**
+     * builds lists
+     */
     public KeyInputEventHandler() {
         buildLists();
-        selected = 0;
+        buildBindings();
     }
 
+
+    private void buildBindings(){
+        Keybindings.a1.setOnPress(() -> playGame(1));
+        Keybindings.a2.setOnPress(() -> playGame(2));
+        Keybindings.a3.setOnPress(() -> playGame(3));
+        Keybindings.a4.setOnPress(() -> playGame(4));
+        Keybindings.a5.setOnPress(() -> playGame(5));
+        Keybindings.a6.setOnPress(() -> playGame(6));
+        Keybindings.a7.setOnPress(() -> playGame(7));
+        Keybindings.a8.setOnPress(() -> playGame(8));
+        Keybindings.a9.setOnPress(() -> playGame(9));
+
+        Keybindings.gp.setOnPress(() -> sendCommand("g party"));
+        Keybindings.lock.setOnPress(() -> {
+            lockOn = !lockOn;
+            addMessage("Lock: " + (lockOn ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
+        });
+        Keybindings.hb.setOnPress(() -> sendCommand("hub"));
+        Keybindings.pd.setOnPress(() -> sendCommand("p disband"));
+        Keybindings.pw.setOnPress(() -> sendCommand("p warp"));
+
+        Keybindings.ra.setOnPress(() -> selectCategory(getAbove(selected, options.length)));
+        Keybindings.la.setOnPress(() -> selectCategory(getBelow(selected, options.length)));
+        Keybindings.sc.setOnPress(() -> {
+            for (int i = 0; i < options.length; i++) {
+                EnumChatFormatting color = EnumChatFormatting.WHITE;
+                if(i == selected)
+                    color = EnumChatFormatting.DARK_GREEN;
+                if(i == getAbove(selected, options.length) || i == getBelow(selected, options.length))
+                    color = EnumChatFormatting.GREEN;
+                addMessage((i + 1) + " - " + color + options[i]);
+            }
+        });
+
+        Keybindings.rp.setOnPress(() -> {
+            if (lastGame != null) {
+                playGame(lastGame, true);
+            }
+            else {
+                addMessage(EnumChatFormatting.RED + "No previous game found.");
+            }
+        });
+        Keybindings.lg.setOnPress(() -> {
+            printCategory();
+            for (int i = 0; i < gameStrings.get(getCurrentCategory()).size(); i++) {
+                addMessage((i + 1) + " - " + getControl(i + 1));
+            }
+            if (lastGame != null) {
+                addMessage("Last Played: " + lastGame.getTranslateString());
+            }
+        });
+    }
+
+    /**
+     * stores categories you can select in order
+     */
     private String[] options;
 
-    private int selected;
 
-    private int lastSelected;
+    private static int getAbove(int index, int maxNum){
+        return (index + 1) % maxNum;
+    }
 
-    private int lastGame;
+    private static int getBelow(int index, int maxNum){
+        return (index - 1 + maxNum) % maxNum;
+    }
 
-    //Builds maps and Lists
+    /**
+     * stores which option is currently selected
+     */
+    private int selected = 0;
+
+
+    /**
+     * stores which game was last played
+     */
+    private Game lastGame;
+
+
+    /**
+     * builds a default for options and gameStrings, then tries to access said values from the internet
+     */
     private void buildLists() {
         options = new String[]{"Skywars","Bedwars","Zombies","Bridges","Duels","TNT"};
         gameStrings = new HashMap<>();
@@ -91,207 +165,197 @@ public class KeyInputEventHandler {
             options = tempC;
     }
 
+
+    /**
+     * stores whether or not numpad buttons can switch games
+     */
     private boolean lockOn = false;
 
+
+    /**
+     * stores all the different games using categories as strings and numpad buttons
+     */
     private Map<String, Map<Integer, Game>> gameStrings;
 
-    //Makes the player say something
-    private static void sendMessage(String message) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("" + message);
+    
+    /**
+     * @param command a command to send
+     *                so if you enter "g disband" the player will send the message "/g disband" into chat
+     */
+    private static void sendCommand(String command) {
+        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + command);
     }
 
-    //Sends message to player
-    public static void addMessage(String message) {
+
+    /**
+     * @param message sends a string message directly to the player
+     *                so if you enter "Lock: disabled" it will send a client side message to the player in chat
+     */
+    private static void addMessage(String message) {
         addMessage(new ChatComponentText(message));
     }
 
-    public static void addMessage(IChatComponent message) {
+
+    /**
+     * @param message a chat component to send to only the player
+     *                so if you enter "Lock: disabled" it will send a client side message to the player in chat
+     */
+    private static void addMessage(IChatComponent message) {
         Minecraft.getMinecraft().thePlayer.addChatMessage(message);
     }
 
-    public static void addMessage(IChatComponent... message) {
-        IChatComponent m = message[0];
-        for (int i = 1; i < message.length; i++) {
-            m = m.appendSibling(message[i]);
-        }
-        addMessage(m);
+
+    /**
+     * prints current category
+     */
+    private void printCategory() {
+        addMessage("Currently Selected: " + EnumChatFormatting.GREEN + getCurrentCategory());
     }
 
 
-    private void printGame() {
-        addMessage("Currently Selected: " + EnumChatFormatting.GREEN + getCurrentGame());
+    /**
+     * @param game a game to play
+     *             makes the player run the /play command with the correct gameString from the Game
+     */
+    private void playGame(Game game){
+        playGame(game, false);
     }
 
-    private void playGame(int id) {
-        playGame(id, false);
-    }
-    private void playGame(int id, boolean override){
+
+    /**
+     * @param game a game to play
+     * @param override whether or not to override the lock
+     *                 makes the player run the /play command with the correct gameString from the Game
+     */
+    private void playGame(Game game, boolean override){
+        if(game == null) return;
         if (lockOn && !override) {
             addMessage("Lock is " + EnumChatFormatting.GREEN + "On");
             return;
         }
-        if (gameStrings.get(getCurrentGame()).keySet().size() >= id) {
-            sendMessage("play " + gameStrings.get(getCurrentGame()).get(id));
-            lastSelected = selected;
-            lastGame = id;
-        }
+        sendCommand("play " + game.getGameString());
+        lastGame = game;
+
     }
 
-    private Game getLastGame(int i) {
-        return gameStrings.get(getCurrentGame()).get(i);
+
+    /**
+     * @param id id of game in gameStrings to play
+     *           makes the player run the /play command with the correct gameString from the Game
+     */
+    private void playGame(int id) {
+        playGame(id, false);
     }
 
-    private String getCurrentGame() {
+
+    /**
+     * @param id id of game in gameStrings to play
+     * @param override whether or not to override the lock
+     *                 makes the player run the /play command with the correct gameString from the Game
+     */
+    private void playGame(int id, boolean override){
+        playGame(getGameFromID(id), override);
+    }
+
+
+    /**
+     * @param id id of game in gameStrings
+     * @return the game the id corresponds to
+     *                  gets a game from the selected category based on the map.
+     */
+    private Game getGameFromID(int id) {
+        return gameStrings.get(getCurrentCategory()).get(id);
+    }
+
+
+    /**
+     * @return get the category that is selected
+     */
+    private String getCurrentCategory() {
         return options[selected];
     }
 
-    private void selectGame(int game) {
-        selectGame(game, true);
+
+    /**
+     * @param category a category to select
+     *                 selects given category
+     */
+    private void selectCategory(int category) {
+        selected = category;
+        printCategory();
+        Keybindings.a1.setKeyDescription(getControl(1));
+        Keybindings.a2.setKeyDescription(getControl(2));
+        Keybindings.a3.setKeyDescription(getControl(3));
+        Keybindings.a4.setKeyDescription(getControl(4));
+        Keybindings.a5.setKeyDescription(getControl(5));
+        Keybindings.a6.setKeyDescription(getControl(6));
+        Keybindings.a7.setKeyDescription(getControl(7));
+        Keybindings.a8.setKeyDescription(getControl(8));
+        Keybindings.a9.setKeyDescription(getControl(9));
     }
 
-    private void selectGame(int game, boolean print) {
-        selected = game;
-        if (print)
-        printGame();
-        Keybindings.a1.setKeyDescription(getLastGameTranslateString(1));
-        Keybindings.a2.setKeyDescription(getLastGameTranslateString(2));
-        Keybindings.a3.setKeyDescription(getLastGameTranslateString(3));
-        Keybindings.a4.setKeyDescription(getLastGameTranslateString(4));
-        Keybindings.a5.setKeyDescription(getLastGameTranslateString(5));
-        Keybindings.a6.setKeyDescription(getLastGameTranslateString(6));
-        Keybindings.a7.setKeyDescription(getLastGameTranslateString(7));
-        Keybindings.a8.setKeyDescription(getLastGameTranslateString(8));
-        Keybindings.a9.setKeyDescription(getLastGameTranslateString(9));
+
+    /**
+     * @param id id
+     * @return a translate string from a given id based on the last game
+     *                  returns Action + id if id doesn't correspond to a game,
+     *                  otherwise returns translate string of said game
+     */
+    private String getControl(int id) {
+        return getGameFromID(id) == null ? "Action " + id : getGameFromID(id).getTranslateString();
     }
 
-    private String getLastGameTranslateString(int id) {
-        return getLastGame(id) == null ? "Action " + id : getLastGame(id).getTranslateString();
-    }
-
+    /**
+     * @param event the key event
+     *              runs whenever a key is pressed
+     */
+    /*String sb = GetScoreboard.getBoardTitle(Minecraft.getMinecraft().thePlayer.getWorldScoreboard());
+                    if (sb != null) {
+                        switch (sb.toLowerCase()) {
+                            case "skywars":
+                                selectCategory(0);
+                                break;
+                            case "bedwars":
+                                selectCategory(1);
+                                break;
+                            case "zombies":
+                                selectCategory(2);
+                                break;
+                            case "thebridges":
+                                selectCategory(3);
+                                break;
+                            case "duels":
+                                selectCategory(4);
+                                break;
+                            case "thetntgames":
+                                selectCategory(5);
+                                break;
+                            default:
+                                addMessage("Could not find game.");
+                        }
+                    } else {
+                        addMessage(EnumChatFormatting.RED + "Could not find game.");
+                    }*/
     @SubscribeEvent
     public void handleKeyInputEvents(InputEvent.KeyInputEvent event) {
-        String sb = GetScoreboard.getBoardTitle(Minecraft.getMinecraft().thePlayer.getWorldScoreboard());
-
-        //Hub
-        if (Keybindings.hb.isPressed()) {
-            sendMessage("hub");
-        }
-
-        //Guild
-        if (Keybindings.gp.isPressed()) {
-            sendMessage("g party");
-        }
-        if (Keybindings.pd.isPressed()) {
-            sendMessage("p disband");
-        }
-
-        if (Keybindings.pw.isPressed()) {
-            sendMessage("p warp");
-        }
-
-        //Arrows
-        if (Keybindings.ra.isPressed()) {
-            selectGame((selected + 1) % options.length);
-        }
-
-        if (Keybindings.la.isPressed()) {
-            selectGame((selected + options.length - 1) % options.length);
-        }
-
-        if (Keybindings.lock.isPressed()) {
-            lockOn = !lockOn;
-            addMessage("Lock " + (lockOn ? EnumChatFormatting.GREEN + "Enabled": EnumChatFormatting.RED + "Disabled"));
-        }
-
-        if (Keybindings.sc.isPressed()) {
-            if (sb != null) {
-                switch (sb.toLowerCase()) {
-                    case "skywars":
-                        selectGame(0);
-                        break;
-                    case "bedwars":
-                        selectGame(1);
-                        break;
-                    case "zombies":
-                        selectGame(2);
-                        break;
-                    case "thebridges":
-                        selectGame(3);
-                        break;
-                    case "duels":
-                        selectGame(4);
-                        break;
-                    case "thetntgames":
-                        selectGame(5);
-                        break;
-                    default:
-                        addMessage("Could not find game.");
-                        return;
-                }
-            } else {
-                addMessage(EnumChatFormatting.RED + "Could not find game.");
-            }
-        }
-
-        if (Keybindings.a1.isPressed()) {
-            playGame(1);
-        }
-
-        if (Keybindings.a2.isPressed()) {
-            playGame(2);
-        }
-
-        if (Keybindings.a3.isPressed()) {
-            playGame(3);
-        }
-
-        if (Keybindings.a4.isPressed()) {
-            playGame(4);
-        }
-
-        if (Keybindings.a5.isPressed()) {
-            playGame(5);
-        }
-
-        if (Keybindings.a6.isPressed()) {
-            playGame(6);
-        }
-
-        if (Keybindings.a7.isPressed()) {
-            playGame(7);
-        }
-
-        if (Keybindings.a8.isPressed()) {
-            playGame(8);
-        }
-
-        if (Keybindings.a9.isPressed()) {
-            playGame(9);
-        }
-
-        if (Keybindings.rp.isPressed()) {
-            if (lastGame != 0) {
-                if (selected != lastSelected)
-                    selectGame(lastSelected);
-                playGame(lastGame, true);
-            }
-            else {
-                addMessage(EnumChatFormatting.RED + "No previous game found.");
-            }
-        }
-
-        if (Keybindings.lg.isPressed()) {
-            printGame();
-            for (int i = 0; i < gameStrings.get(getCurrentGame()).size(); i++) {
-                addMessage((i + 1) + " - " + getLastGameTranslateString(i + 1));
-            }
-            if (selected != lastSelected && lastGame != 0) {
-                int temp = selected;
-                selectGame(lastSelected, false);
-                addMessage("Last Played: " + getLastGameTranslateString(lastGame));
-                selectGame(temp, false);
-            } else
-                addMessage("Last Played: " + getLastGameTranslateString(lastGame));
-        }
+        Keybindings.la.runIfPressed();
+        Keybindings.ra.runIfPressed();
+        Keybindings.sc.runIfPressed();
+        Keybindings.hb.runIfPressed();
+        Keybindings.gp.runIfPressed();
+        Keybindings.lg.runIfPressed();
+        Keybindings.pd.runIfPressed();
+        Keybindings.pw.runIfPressed();
+        Keybindings.rp.runIfPressed();
+        Keybindings.lock.runIfPressed();
+        Keybindings.a1.runIfPressed();
+        Keybindings.a2.runIfPressed();
+        Keybindings.a3.runIfPressed();
+        Keybindings.a4.runIfPressed();
+        Keybindings.a5.runIfPressed();
+        Keybindings.a6.runIfPressed();
+        Keybindings.a7.runIfPressed();
+        Keybindings.a8.runIfPressed();
+        Keybindings.a9.runIfPressed();
     }
 }

@@ -11,6 +11,17 @@ public class BetterKeyBinding extends KeyBinding {
         this.desc = name;
     }
 
+    private Runnable onPress;
+
+    public void setOnPress(Runnable onPress){
+        this.onPress = onPress;
+    }
+
+    public void runIfPressed(){
+        if(this.isPressed())
+            onPress.run();
+    }
+
     @Override
     public String getKeyDescription() {
         return desc;

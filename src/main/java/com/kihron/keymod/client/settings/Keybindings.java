@@ -8,27 +8,27 @@ import org.lwjgl.input.Keyboard;
 public class Keybindings
 {
     //Guild
-    public static KeyBinding gp = new KeyBinding(Keys.GP, Keyboard.KEY_LBRACKET, Keys.GUILD);
-    public static KeyBinding pd = new KeyBinding(Keys.PD, Keyboard.KEY_RBRACKET, Keys.GUILD);
-    public static KeyBinding pw = new KeyBinding(Keys.PW, Keyboard.KEY_P, Keys.GUILD);
+    public static BetterKeyBinding gp = new BetterKeyBinding(Keys.GP, Keyboard.KEY_LBRACKET, Keys.GUILD);
+    public static BetterKeyBinding pd = new BetterKeyBinding(Keys.PD, Keyboard.KEY_RBRACKET, Keys.GUILD);
+    public static BetterKeyBinding pw = new BetterKeyBinding(Keys.PW, Keyboard.KEY_P, Keys.GUILD);
 
     //Hub
-    public static KeyBinding hb = new KeyBinding(Keys.HB, Keyboard.KEY_H, Keys.ALL);
+    public static BetterKeyBinding hb = new BetterKeyBinding(Keys.HB, Keyboard.KEY_H, Keys.ALL);
 
     //Cycle
-    public static KeyBinding la = new KeyBinding(Keys.LA, Keyboard.KEY_LEFT, Keys.ALL);
-    public static KeyBinding ra = new KeyBinding(Keys.RA, Keyboard.KEY_RIGHT, Keys.ALL);
+    public static BetterKeyBinding la = new BetterKeyBinding(Keys.LA, Keyboard.KEY_LEFT, Keys.ALL);
+    public static BetterKeyBinding ra = new BetterKeyBinding(Keys.RA, Keyboard.KEY_RIGHT, Keys.ALL);
 
     //Replay
-    public static KeyBinding rp = new KeyBinding(Keys.RP, Keyboard.KEY_NUMPAD0, Keys.ALL);
+    public static BetterKeyBinding rp = new BetterKeyBinding(Keys.RP, Keyboard.KEY_NUMPAD0, Keys.ALL);
 
     //Select Current
-    public static KeyBinding sc = new KeyBinding(Keys.SC, Keyboard.KEY_UP, Keys.ALL);
+    public static BetterKeyBinding sc = new BetterKeyBinding(Keys.SC, Keyboard.KEY_UP, Keys.ALL);
 
     //List Games
-    public static KeyBinding lg = new KeyBinding(Keys.LG, Keyboard.KEY_DOWN, Keys.ALL);
+    public static BetterKeyBinding lg = new BetterKeyBinding(Keys.LG, Keyboard.KEY_DOWN, Keys.ALL);
 
-    public static KeyBinding lock = new KeyBinding(Keys.LOCK, Keyboard.KEY_DECIMAL, Keys.ALL);
+    public static BetterKeyBinding lock = new BetterKeyBinding(Keys.LOCK, Keyboard.KEY_DECIMAL, Keys.ALL);
 
     //All Games
     public static BetterKeyBinding a1 = new BetterKeyBinding(Keys.A1 + ".default", Keyboard.KEY_NUMPAD1, Keys.ALL);
