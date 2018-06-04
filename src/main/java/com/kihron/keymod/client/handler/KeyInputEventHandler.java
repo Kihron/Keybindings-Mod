@@ -177,7 +177,7 @@ public class KeyInputEventHandler {
      */
     private Map<String, Map<Integer, Game>> gameStrings;
 
-    
+
     /**
      * @param command a command to send
      *                so if you enter "g disband" the player will send the message "/g disband" into chat
