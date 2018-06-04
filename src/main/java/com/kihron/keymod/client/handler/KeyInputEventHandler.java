@@ -309,7 +309,29 @@ public class KeyInputEventHandler {
      * @param event the key event
      *              runs whenever a key is pressed
      */
-    /*String sb = GetScoreboard.getBoardTitle(Minecraft.getMinecraft().thePlayer.getWorldScoreboard());
+    @SubscribeEvent
+    public void handleKeyInputEvents(InputEvent.KeyInputEvent event) {
+        Keybindings.la.runIfPressed();
+        Keybindings.ra.runIfPressed();
+        Keybindings.sc.runIfPressed();
+        Keybindings.hb.runIfPressed();
+        Keybindings.gp.runIfPressed();
+        Keybindings.lg.runIfPressed();
+        Keybindings.pd.runIfPressed();
+        Keybindings.pw.runIfPressed();
+        Keybindings.rp.runIfPressed();
+        Keybindings.lock.runIfPressed();
+        Keybindings.a1.runIfPressed();
+        Keybindings.a2.runIfPressed();
+        Keybindings.a3.runIfPressed();
+        Keybindings.a4.runIfPressed();
+        Keybindings.a5.runIfPressed();
+        Keybindings.a6.runIfPressed();
+        Keybindings.a7.runIfPressed();
+        Keybindings.a8.runIfPressed();
+        Keybindings.a9.runIfPressed();
+    }
+     /*String sb = GetScoreboard.getBoardTitle(Minecraft.getMinecraft().thePlayer.getWorldScoreboard());
                     if (sb != null) {
                         switch (sb.toLowerCase()) {
                             case "skywars":
@@ -336,26 +358,4 @@ public class KeyInputEventHandler {
                     } else {
                         addMessage(EnumChatFormatting.RED + "Could not find game.");
                     }*/
-    @SubscribeEvent
-    public void handleKeyInputEvents(InputEvent.KeyInputEvent event) {
-        Keybindings.la.runIfPressed();
-        Keybindings.ra.runIfPressed();
-        Keybindings.sc.runIfPressed();
-        Keybindings.hb.runIfPressed();
-        Keybindings.gp.runIfPressed();
-        Keybindings.lg.runIfPressed();
-        Keybindings.pd.runIfPressed();
-        Keybindings.pw.runIfPressed();
-        Keybindings.rp.runIfPressed();
-        Keybindings.lock.runIfPressed();
-        Keybindings.a1.runIfPressed();
-        Keybindings.a2.runIfPressed();
-        Keybindings.a3.runIfPressed();
-        Keybindings.a4.runIfPressed();
-        Keybindings.a5.runIfPressed();
-        Keybindings.a6.runIfPressed();
-        Keybindings.a7.runIfPressed();
-        Keybindings.a8.runIfPressed();
-        Keybindings.a9.runIfPressed();
-    }
 }

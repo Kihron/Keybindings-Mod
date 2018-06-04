@@ -4,6 +4,7 @@ import com.kihron.keymod.client.config.Config;
 import com.kihron.keymod.client.handler.KeyEventHandler;
 import com.kihron.keymod.client.handler.KeyInputEventHandler;
 import com.kihron.keymod.proxy.CommonProxy;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -85,8 +86,8 @@ public class KeyMod {
     public static void init(FMLInitializationEvent event)
     {
         proxy.init(event);
-        FMLCommonHandler.instance().bus().register(new KeyInputEventHandler());
-        FMLCommonHandler.instance().bus().register(new KeyEventHandler());
+        MinecraftForge.EVENT_BUS.register(new KeyInputEventHandler());
+        MinecraftForge.EVENT_BUS.register(new KeyEventHandler());
     }
 
     @EventHandler
