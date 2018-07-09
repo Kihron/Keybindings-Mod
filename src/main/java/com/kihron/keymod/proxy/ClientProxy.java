@@ -35,6 +35,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.registerKeyBinding(Keybindings.hb);
         ClientRegistry.registerKeyBinding(Keybindings.pw);
         ClientRegistry.registerKeyBinding(Keybindings.lg);
+        ClientRegistry.registerKeyBinding(Keybindings.lock);
     }
 
     public void init(FMLInitializationEvent event)
