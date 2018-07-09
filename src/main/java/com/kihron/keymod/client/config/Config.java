@@ -22,9 +22,9 @@ public class Config {
 
     public static final String CATEGORY_NAME_VERSION_CHECKER = "version_checker";
 
-	/*
-	 * Update Checkers Config
-	 */
+    /*
+     * Update Checkers Config
+     */
     /**
      * Whether or not a specific mod's update checker is disabled (the key is
      * the mod's modid)
@@ -36,7 +36,7 @@ public class Config {
     private static Configuration config = null;
 
     public static void preInit() {
-        File configFile = new File(Loader.instance().getConfigDir(), "KeyMod.cfg");
+        File configFile = new File(Loader.instance().getConfigDir(), "Electritech.cfg");
         config = new Configuration(configFile);
         syncFromFile();
     }
@@ -76,15 +76,15 @@ public class Config {
         if (loadConfigFromFile)
             config.load();
 
-		/*
-		 * Update Checkers Config
-		 */
+        /*
+         * Update Checkers Config
+         */
         List<String> propertyOrderUpdateChecker = new ArrayList<String>();
         Iterator<String> mods = UPDATE_CHECKER_MODS.keySet().iterator();
         while (mods.hasNext()) {
             String modid = mods.next();
             Property propertyUpdateCheckerEnabled = config.get(CATEGORY_NAME_VERSION_CHECKER, modid, true);
-            propertyUpdateCheckerEnabled.comment=("Whether the update checker for " + modid + " is enabled");
+            propertyUpdateCheckerEnabled.setComment("Whether the update checker for " + modid + " is enabled");
             propertyUpdateCheckerEnabled.setLanguageKey("gui.config.update_checker.enabled.name");
             UPDATE_CHECKER_MOD_PROPERTIES.add(Pair.of(modid, propertyUpdateCheckerEnabled));
             propertyOrderUpdateChecker.add(propertyUpdateCheckerEnabled.getName());
@@ -92,18 +92,18 @@ public class Config {
         config.setCategoryPropertyOrder(CATEGORY_NAME_VERSION_CHECKER, propertyOrderUpdateChecker);
 
         if (readFieldsFromConfig) {
-			/*
-			 * Update Checkers Config
-			 */
+            /*
+             * Update Checkers Config
+             */
             for (Pair<String, Property> mod : UPDATE_CHECKER_MOD_PROPERTIES) {
                 UPDATE_CHECKER_MODS.remove(mod.getLeft());
                 UPDATE_CHECKER_MODS.put(mod.getLeft(), mod.getRight().getBoolean());
             }
         }
 
-		/*
-		 * Update Checkers Config
-		 */
+        /*
+         * Update Checkers Config
+         */
         for (Pair<String, Property> mod : UPDATE_CHECKER_MOD_PROPERTIES) {
             mod.getRight().set(UPDATE_CHECKER_MODS.get(mod.getLeft()));
         }
@@ -116,9 +116,8 @@ public class Config {
 
         @SubscribeEvent(priority = EventPriority.NORMAL)
         public void onEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-            if (Reference.MOD_ID.equalsIgnoreCase(event.modID)) {
+            if (Reference.MOD_ID.equalsIgnoreCase(event.getModID())) {
                 syncFromGUI();
-                System.out.println("Synced!");
             }
         }
 

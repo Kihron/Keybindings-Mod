@@ -10,12 +10,12 @@ import com.kihron.keymod.client.config.Config;
 import joptsimple.internal.Strings;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.event.HoverEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -72,37 +72,37 @@ public class VersionChecker {
             return;
         }
         if (updateRequired) {
-            player.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE
-                    + I18n.format("update.ready", EnumChatFormatting.GOLD + name + EnumChatFormatting.WHITE)));
-            player.addChatMessage(new ChatComponentText(EnumChatFormatting.WHITE
-                    + I18n.format("update.version", EnumChatFormatting.DARK_RED + currentVersion + EnumChatFormatting.WHITE,
-                    EnumChatFormatting.DARK_GREEN + version)));
-            IChatComponent changeLogAndVersion = new ChatComponentText("");
+            player.sendMessage(new TextComponentString(TextFormatting.WHITE
+                    + I18n.format("update.ready", TextFormatting.GOLD + name + TextFormatting.WHITE)));
+            player.sendMessage(new TextComponentString(TextFormatting.WHITE
+                    + I18n.format("update.version", TextFormatting.DARK_RED + currentVersion + TextFormatting.WHITE,
+                    TextFormatting.DARK_GREEN + version)));
+            ITextComponent changeLogAndVersion = new TextComponentString("");
             if (!Strings.isNullOrEmpty(downloadURL))
-                changeLogAndVersion.appendSibling(new ChatComponentText(EnumChatFormatting.WHITE + "["
-                        + EnumChatFormatting.DARK_AQUA + I18n.format("update.download") + EnumChatFormatting.WHITE + "] ")
-                        .setChatStyle(new ChatStyle()
-                                .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadURL)).setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(downloadURL)))));
+                changeLogAndVersion.appendSibling(new TextComponentString(TextFormatting.WHITE + "["
+                        + TextFormatting.DARK_AQUA + I18n.format("update.download") + TextFormatting.WHITE + "] ")
+                        .setStyle(new Style()
+                                .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadURL)).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(downloadURL)))));
             if (changeLog.size() > 0) {
                 String changeLogString = "";
                 for (String log : changeLog) {
                     if (log.startsWith("*"))
-                        changeLogString += EnumChatFormatting.AQUA;
+                        changeLogString += TextFormatting.AQUA;
                     else if (log.startsWith("-"))
-                        changeLogString += EnumChatFormatting.RED;
+                        changeLogString += TextFormatting.RED;
                     else if (log.startsWith("+"))
-                        changeLogString += EnumChatFormatting.GREEN;
+                        changeLogString += TextFormatting.GREEN;
                     else
-                        changeLogString += EnumChatFormatting.WHITE;
+                        changeLogString += TextFormatting.WHITE;
                     changeLogString += log + "\n";
                 }
                 changeLogString = changeLogString.substring(0, changeLogString.length() - 1);
-                changeLogAndVersion.appendSibling(new ChatComponentText(
-                        "[" + EnumChatFormatting.DARK_AQUA + I18n.format("update.changelog") + EnumChatFormatting.WHITE + "]")
-                        .setChatStyle(new ChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                new ChatComponentText(changeLogString)))));
+                changeLogAndVersion.appendSibling(new TextComponentString(
+                        "[" + TextFormatting.DARK_AQUA + I18n.format("update.changelog") + TextFormatting.WHITE + "]")
+                        .setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new TextComponentString(changeLogString)))));
             }
-            player.addChatMessage((changeLogAndVersion));
+            player.sendMessage((changeLogAndVersion));
         }
     }
 

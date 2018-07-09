@@ -13,9 +13,9 @@ public class KeyEventHandler {
 
     @SubscribeEvent
     public void onEntityJoinWorldEvent(EntityJoinWorldEvent event) {
-        if (event.entity.worldObj.isRemote && event.entity == Minecraft.getMinecraft().thePlayer) {
+        if (event.getEntity().world.isRemote && event.getEntity() == Minecraft.getMinecraft().player) {
             if (!hasRun) {
-                EntityPlayer player = (EntityPlayer) event.entity;
+                EntityPlayer player = (EntityPlayer) event.getEntity();
                 VersionChecker.checkForUpdate(VersionChecker.KeyModURL, Reference.MOD_ID, Reference.VERSION, player);
                 hasRun = true;
             }

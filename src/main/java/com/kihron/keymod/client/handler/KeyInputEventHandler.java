@@ -4,9 +4,9 @@ import com.kihron.keymod.client.json.Game;
 import com.kihron.keymod.client.json.JSONReader;
 import com.kihron.keymod.client.settings.Keybindings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
@@ -40,7 +40,7 @@ public class KeyInputEventHandler {
         Keybindings.gp.setOnPress(() -> sendCommand("g party"));
         Keybindings.lock.setOnPress(() -> {
             lockOn = !lockOn;
-            addMessage("Lock: " + (lockOn ? EnumChatFormatting.GREEN + "Enabled" : EnumChatFormatting.RED + "Disabled"));
+            addMessage("Lock: " + (lockOn ? TextFormatting.GREEN + "Enabled" : TextFormatting.RED + "Disabled"));
         });
         Keybindings.hb.setOnPress(() -> sendCommand("hub"));
         Keybindings.pd.setOnPress(() -> sendCommand("p disband"));
@@ -50,11 +50,11 @@ public class KeyInputEventHandler {
         Keybindings.la.setOnPress(() -> selectCategory(getBelow(selected, options.length)));
         Keybindings.sc.setOnPress(() -> {
             for (int i = 0; i < options.length; i++) {
-                EnumChatFormatting color = EnumChatFormatting.WHITE;
+                TextFormatting color = TextFormatting.WHITE;
                 if(i == selected)
-                    color = EnumChatFormatting.DARK_GREEN;
+                    color = TextFormatting.DARK_GREEN;
                 if(i == getAbove(selected, options.length) || i == getBelow(selected, options.length))
-                    color = EnumChatFormatting.GREEN;
+                    color = TextFormatting.GREEN;
                 addMessage((i + 1) + " - " + color + options[i]);
             }
         });
@@ -64,7 +64,7 @@ public class KeyInputEventHandler {
                 playGame(lastGame, true);
             }
             else {
-                addMessage(EnumChatFormatting.RED + "No previous game found.");
+                addMessage(TextFormatting.RED + "No previous game found.");
             }
         });
         Keybindings.lg.setOnPress(() -> {
@@ -183,7 +183,7 @@ public class KeyInputEventHandler {
      *                so if you enter "g disband" the player will send the message "/g disband" into chat
      */
     private static void sendCommand(String command) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage("/" + command);
+        Minecraft.getMinecraft().player.sendChatMessage("/" + command);
     }
 
 
@@ -192,7 +192,7 @@ public class KeyInputEventHandler {
      *                so if you enter "Lock: disabled" it will send a client side message to the player in chat
      */
     private static void addMessage(String message) {
-        addMessage(new ChatComponentText(message));
+        addMessage(new TextComponentString(message));
     }
 
 
@@ -200,8 +200,8 @@ public class KeyInputEventHandler {
      * @param message a chat component to send to only the player
      *                so if you enter "Lock: disabled" it will send a client side message to the player in chat
      */
-    private static void addMessage(IChatComponent message) {
-        Minecraft.getMinecraft().thePlayer.addChatMessage(message);
+    private static void addMessage(ITextComponent message) {
+        Minecraft.getMinecraft().player.sendMessage(message);
     }
 
 
@@ -209,7 +209,7 @@ public class KeyInputEventHandler {
      * prints current category
      */
     private void printCategory() {
-        addMessage("Currently Selected: " + EnumChatFormatting.GREEN + getCurrentCategory());
+        addMessage("Currently Selected: " + TextFormatting.GREEN + getCurrentCategory());
     }
 
 
@@ -230,7 +230,7 @@ public class KeyInputEventHandler {
     private void playGame(Game game, boolean override){
         if(game == null) return;
         if (lockOn && !override) {
-            addMessage("Lock is " + EnumChatFormatting.GREEN + "On");
+            addMessage("Lock is " + TextFormatting.GREEN + "On");
             return;
         }
         sendCommand("play " + game.getGameString());
