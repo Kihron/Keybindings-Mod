@@ -20,3 +20,22 @@ build
 # other
 eclipse
 run
+*.cfg
+*.gz
+*.dat
+*.mca
+saves/Testing Keybinds/stats/5b0c46c0-894b-30a6-bd31-bf02da63882f.json
+saves/Testing Keybinds/stats/2ce4ef37-1586-3eaf-ba6f-4b93d1e38829.json
+saves/Testing Keybinds/stats/3bdd7bc1-57b3-3ed1-a14e-cc7341dec1b1.json
+saves/Testing Keybinds/stats/7ff3eb93-8be9-3a7d-9590-647acffcfb2b.json
+saves/Testing Keybinds/stats/c4f44bdc-3735-3cd8-a9bc-fcc7058fd604.json
+saves/Testing Keybinds/stats/df8174ec-bca9-3a1b-ba60-043f16a73d79.json
+saves/Testing Keybinds/session.lock
+saves/Testing Keybinds/level.dat_old
+saves/Testing Keybinds/level.dat_mcr
+options.txt
+logs/latest.log
+crash-reports/crash-2018-06-02_15.07.42-client.txt
+config/splash.properties
+usernamecache.json
+usercache.json
